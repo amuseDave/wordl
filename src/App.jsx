@@ -12,8 +12,8 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const wordl = JSON.parse(localStorage.getItem("wordl"));
-    const words = JSON.parse(localStorage.getItem("words"));
+    const wordl = JSON.parse(localStorage.getItem("wordl2"));
+    const words = JSON.parse(localStorage.getItem("words2"));
 
     if (wordl) {
       dispatch(getWordlStateThunk(wordl, words));

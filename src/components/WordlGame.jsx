@@ -16,8 +16,8 @@ export default function WordlGame() {
 
   useEffect(() => {
     if (wordl.correctWord && words) {
-      localStorage.setItem("wordl", JSON.stringify(wordl));
-      localStorage.setItem("words", JSON.stringify(words));
+      localStorage.setItem("wordl2", JSON.stringify(wordl));
+      localStorage.setItem("words2", JSON.stringify(words));
     }
   }, [wordl, words]);
 
