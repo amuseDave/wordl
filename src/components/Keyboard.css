@@ -1,0 +1,102 @@
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+.row-keyboard {
+  display: flex;
+  align-items: center;
+}
+
+.key {
+  width: 40px;
+  height: 40px;
+  margin: 2px;
+  background-color: #494949;
+  border: none;
+  border-radius: 5px;
+  font-size: 19px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  color: rgb(0, 0, 0);
+}
+
+.key:hover {
+  background-color: #d0d0d0;
+}
+
+.special-key {
+  width: 60px;
+  height: 40px;
+  margin: 2px;
+  background-color: #6e6e6e;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+}
+
+.special-key:hover {
+  background-color: #b0b0b0;
+}
+
+.undefined-key {
+  background-color: rgb(170, 170, 98);
+}
+.wrong-key {
+  background-color: rgb(139, 85, 85);
+}
+.correct-key {
+  background-color: rgb(72, 158, 72);
+}
+
+.undefined-key:hover {
+  background-color: #a2ac4b;
+}
+.wrong-key:hover {
+  background-color: rgb(206, 99, 99);
+}
+.correct-key:hover {
+  background-color: rgb(64, 196, 64);
+}
+.row-keyboard button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.submit-img {
+  width: 32px;
+}
+@media (max-width: 470px) {
+  .key {
+    width: 35px;
+    height: 35px;
+    margin: 2px 1px;
+  }
+  .special-key {
+    width: 35px;
+    height: 35px;
+    margin: 2px 1px;
+  }
+}
+@media (max-width: 400px) {
+  .key {
+    width: 30px;
+    height: 30px;
+  }
+  .special-key {
+    width: 30px;
+    height: 30px;
+  }
+}

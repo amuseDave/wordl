@@ -11,6 +11,42 @@ const initialState = {
   correctWordCopy: null,
   isWinner: null,
   guessedWords: [],
+  keyboard: [
+    [
+      { key: "Q", state: null },
+      { key: "W", state: null },
+      { key: "E", state: null },
+      { key: "R", state: null },
+      { key: "T", state: null },
+      { key: "Y", state: null },
+      { key: "U", state: null },
+      { key: "I", state: null },
+      { key: "O", state: null },
+      { key: "P", state: null },
+    ],
+    [
+      { key: "A", state: null },
+      { key: "S", state: null },
+      { key: "D", state: null },
+      { key: "F", state: null },
+      { key: "G", state: null },
+      { key: "H", state: null },
+      { key: "J", state: null },
+      { key: "K", state: null },
+      { key: "L", state: null },
+    ],
+    [
+      { key: "Delete", state: null },
+      { key: "Z", state: null },
+      { key: "X", state: null },
+      { key: "C", state: null },
+      { key: "V", state: null },
+      { key: "B", state: null },
+      { key: "N", state: null },
+      { key: "M", state: null },
+      { key: "Submit", state: null },
+    ],
+  ],
 };
 
 const wordlSlicer = createSlice({
@@ -20,6 +56,11 @@ const wordlSlicer = createSlice({
     setWord(state, action) {
       state.correctWord = action.payload;
       state.correctWordCopy = action.payload;
+    },
+    setKeyboard(state) {
+      state.keyboard.forEach((row) =>
+        row.forEach((button) => (button.state = null))
+      );
     },
     typeWord(state, action) {
       if (state.correctWord === null) return;
@@ -32,6 +73,7 @@ const wordlSlicer = createSlice({
       }
     },
     setWordl(state, actions) {
+      state.keyboard = actions.payload.keyboard;
       state.container = actions.payload.container;
       state.activeColumn = actions.payload.activeColumn;
       state.activeRow = actions.payload.activeRow;
@@ -71,38 +113,64 @@ const wordlSlicer = createSlice({
       }
     },
     submitWord(state, action) {
-      const correctWordLettersArrayCopy = state.correctWordCopy.split("");
-      state.guessedWords.push(action.payload);
+      const {
+        correctWordCopy,
+        guessedWords,
+        container,
+        keyboard,
+        activeColumn,
+      } = state;
+      const correctWordLetters = correctWordCopy.split("");
+      const guessedWord = action.payload;
+      // Update guessed words
+      guessedWords.push(guessedWord);
+      // Create a helper function to update keyboard states
+      const updateKeyboardState = (letter, newState) => {
+        for (const row of keyboard) {
+          const index = row.findIndex(
+            (button) => button.key.toLowerCase() === letter
+          );
+          if (index > -1) {
+            if (row[index].state === true) return;
+            if (row[index].state === undefined && newState === false) return;
 
-      state.container[state.activeColumn].forEach((box, index) => {
+            row[index].state = newState;
+          }
+        }
+      };
+      // Process the guessed word
+      container[activeColumn].forEach((box, index) => {
         const letter = box.letter;
-
-        if (letter === state.correctWord.at(index)) {
+        if (letter === correctWordCopy[index]) {
+          updateKeyboardState(letter, true);
           box.isCorrect = true;
-          correctWordLettersArrayCopy[index] = "";
+          correctWordLetters[index] = "";
         }
       });
 
-      state.container[state.activeColumn].forEach((box) => {
+      container[activeColumn].forEach((box) => {
         const letter = box.letter;
-        if (correctWordLettersArrayCopy.includes(letter)) {
+        if (correctWordLetters.includes(letter)) {
+          updateKeyboardState(letter, undefined);
           box.isCorrect = undefined;
-          correctWordLettersArrayCopy[
-            correctWordLettersArrayCopy.indexOf(letter)
-          ] = "";
+          correctWordLetters[correctWordLetters.indexOf(letter)] = "";
         } else if (box.isCorrect !== true) {
+          updateKeyboardState(letter, false);
           box.isCorrect = false;
         }
       });
 
+      // Move to the next column and reset the row
       state.activeColumn++;
       state.activeRow = 0;
 
-      if (state.activeColumn === state.container.length) {
+      // Check if the game is over
+      if (state.activeColumn === container.length) {
         state.isWinner = false;
         state.isGuessed = true;
       }
     },
+
     enableWin(state) {
       state.isGuessed = true;
       state.isWinner = true;
@@ -135,6 +203,7 @@ export function resetGameThunk(wordsData) {
     const randomWord = wordsData[Math.floor(Math.random() * wordsData.length)];
 
     dispatch(wordlActions.resetGame());
+    dispatch(wordlActions.setKeyboard());
     dispatch(wordlActions.setWord(randomWord));
   };
 }
