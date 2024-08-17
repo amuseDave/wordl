@@ -135,7 +135,7 @@ export function resetGameThunk(wordsData) {
     const randomWord = wordsData[Math.floor(Math.random() * wordsData.length)];
 
     dispatch(wordlActions.resetGame());
-    dispatch(wordlActions.setWord("spout"));
+    dispatch(wordlActions.setWord(randomWord));
   };
 }
 
